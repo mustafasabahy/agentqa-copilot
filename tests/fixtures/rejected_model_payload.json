@@ -1,0 +1,116 @@
+{
+  "request_id": "draft-controlled-fixture",
+  "batch_index": 0,
+  "cases": [
+    {
+      "name": "get_leave_balance omits optional year and uses default current context year",
+      "objective": "Verify get_leave_balance accepts a request without the optional year argument and resolves the balance using the default year behavior.",
+      "capability": "leave_balance_lookup",
+      "category": "argument_handling",
+      "priority": 3,
+      "preconditions": [
+        "A valid employee identity is available to the harness or test fixture."
+      ],
+      "turns": [
+        "Call get_leave_balance with employee identity provided and year omitted."
+      ],
+      "expected_behavior": "The tool returns a leave balance response using the default year resolution rather than rejecting the request for a missing optional year.",
+      "assertions": [
+        {
+          "kind": "required_arguments",
+          "path": "year",
+          "expected_json": "null",
+          "description": "year is optional and may be omitted"
+        },
+        {
+          "kind": "response_format",
+          "path": "",
+          "expected_json": {
+            "type": "object"
+          },
+          "description": "Response is structured"
+        }
+      ],
+      "risk": "read_only",
+      "modes": [
+        "static",
+        "historical",
+        "mock",
+        "live"
+      ]
+    },
+    {
+      "name": "get_leave_balance accepts explicit null year as optional input",
+      "objective": "Verify get_leave_balance treats an explicit null year as equivalent to omission for the optional year field.",
+      "capability": "leave_balance_lookup",
+      "category": "argument_handling",
+      "priority": 3,
+      "preconditions": [
+        "A valid employee identity is available to the harness or test fixture."
+      ],
+      "turns": [
+        "Call get_leave_balance with employee identity provided and year explicitly set to null."
+      ],
+      "expected_behavior": "The tool returns a leave balance response and does not fail validation solely because year is null.",
+      "assertions": [
+        {
+          "kind": "equals",
+          "path": "year",
+          "expected_json": null,
+          "description": "Explicit null is accepted for optional year"
+        },
+        {
+          "kind": "response_format",
+          "path": "",
+          "expected_json": {
+            "type": "object"
+          },
+          "description": "Response is structured"
+        }
+      ],
+      "risk": "read_only",
+      "modes": [
+        "static",
+        "historical",
+        "mock",
+        "live"
+      ]
+    },
+    {
+      "name": "get_leave_balance rejects missing employee identity without trusted identity",
+      "objective": "Verify get_leave_balance requires an employee identity when no trusted identity is available and returns a clear argument/authorization failure.",
+      "capability": "leave_balance_lookup",
+      "category": "authorization_and_required_arguments",
+      "priority": 1,
+      "turns": [
+        "Call get_leave_balance with year omitted and without providing any employee identity, and without a trusted identity context."
+      ],
+      "expected_behavior": "The tool refuses the request because the required employee identity is missing and no trusted identity is present.",
+      "assertions": [
+        {
+          "kind": "required_arguments",
+          "path": "employee_identity",
+          "expected_json": null,
+          "security": true,
+          "description": "Employee identity is required when trusted identity is absent"
+        },
+        {
+          "kind": "authorization_denied",
+          "path": "",
+          "expected_json": {
+            "reason": "missing_employee_identity"
+          },
+          "security": true,
+          "description": "Request is denied or rejected due to missing identity"
+        }
+      ],
+      "risk": "unknown",
+      "modes": [
+        "static",
+        "historical",
+        "mock",
+        "live"
+      ]
+    }
+  ]
+}

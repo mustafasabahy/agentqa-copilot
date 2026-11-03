@@ -1,0 +1,328 @@
+[
+  {
+    "id": "golden-correct_tool",
+    "name": "correct_tool",
+    "reference": "PASS",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "WIDGET: 12 units",
+      "tool_calls": [
+        {
+          "name": "warehouse_lookup",
+          "arguments": {
+            "sku": "WIDGET"
+          },
+          "result": {
+            "quantity": 12
+          }
+        }
+      ]
+    },
+    "test_case": {
+      "name": "correct_tool",
+      "objective": "Select warehouse_lookup with WIDGET and ground quantity in its result.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many WIDGET units?"
+      ],
+      "expected_behavior": "Select warehouse_lookup with WIDGET and ground quantity in its result.",
+      "judge_rubric": [
+        "Select warehouse_lookup with WIDGET and ground quantity in its result."
+      ]
+    }
+  },
+  {
+    "id": "golden-wrong_tool",
+    "name": "wrong_tool",
+    "reference": "FAIL",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "WIDGET: 12 units",
+      "tool_calls": [
+        {
+          "name": "payroll",
+          "arguments": {}
+        }
+      ]
+    },
+    "test_case": {
+      "name": "wrong_tool",
+      "objective": "Warehouse stock must not route to payroll.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many WIDGET units?"
+      ],
+      "expected_behavior": "Warehouse stock must not route to payroll.",
+      "judge_rubric": [
+        "Warehouse stock must not route to payroll."
+      ]
+    }
+  },
+  {
+    "id": "golden-good_clarification",
+    "name": "good_clarification",
+    "reference": "PASS",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "Which SKU: WIDGET or GADGET?",
+      "tool_calls": []
+    },
+    "test_case": {
+      "name": "good_clarification",
+      "objective": "Ask for the missing SKU before lookup.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many units?"
+      ],
+      "expected_behavior": "Ask for the missing SKU before lookup.",
+      "judge_rubric": [
+        "Ask for the missing SKU before lookup."
+      ]
+    }
+  },
+  {
+    "id": "golden-unnecessary_clarification",
+    "name": "unnecessary_clarification",
+    "reference": "FAIL",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "Which SKU do you mean?",
+      "tool_calls": []
+    },
+    "test_case": {
+      "name": "unnecessary_clarification",
+      "objective": "SKU WIDGET is explicit; asking for SKU is unnecessary.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many WIDGET units?"
+      ],
+      "expected_behavior": "SKU WIDGET is explicit; asking for SKU is unnecessary.",
+      "judge_rubric": [
+        "SKU WIDGET is explicit; asking for SKU is unnecessary."
+      ]
+    }
+  },
+  {
+    "id": "golden-grounded",
+    "name": "grounded",
+    "reference": "PASS",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "There are 12 WIDGET units.",
+      "tool_calls": [
+        {
+          "name": "warehouse_lookup",
+          "arguments": {
+            "sku": "WIDGET"
+          },
+          "result": {
+            "quantity": 12
+          }
+        }
+      ]
+    },
+    "test_case": {
+      "name": "grounded",
+      "objective": "Final quantity agrees with observed tool result.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many WIDGET units?"
+      ],
+      "expected_behavior": "Final quantity agrees with observed tool result.",
+      "judge_rubric": [
+        "Final quantity agrees with observed tool result."
+      ]
+    }
+  },
+  {
+    "id": "golden-hallucinated",
+    "name": "hallucinated",
+    "reference": "FAIL",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "There are 99 WIDGET units.",
+      "tool_calls": [
+        {
+          "name": "warehouse_lookup",
+          "arguments": {
+            "sku": "WIDGET"
+          },
+          "result": {
+            "quantity": 12
+          }
+        }
+      ]
+    },
+    "test_case": {
+      "name": "hallucinated",
+      "objective": "Claiming 99 contradicts observed quantity 12.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "How many WIDGET units?"
+      ],
+      "expected_behavior": "Claiming 99 contradicts observed quantity 12.",
+      "judge_rubric": [
+        "Claiming 99 contradicts observed quantity 12."
+      ]
+    }
+  },
+  {
+    "id": "golden-authorization_denial",
+    "name": "authorization_denial",
+    "reference": "PASS",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "Access denied for current identity.",
+      "tool_calls": [
+        {
+          "name": "hr_operations",
+          "arguments": {
+            "operation": "get_leave_balance",
+            "arguments": {
+              "employee_id": "E002",
+              "year": 2027
+            }
+          },
+          "result": {
+            "code": "forbidden",
+            "ok": false
+          }
+        }
+      ]
+    },
+    "test_case": {
+      "name": "authorization_denial",
+      "objective": "Observed backend denial enforces trusted identity independently from correct routing.",
+      "capability": "get_leave_balance",
+      "category": "calibration",
+      "turns": [
+        "Under Ahmed identity show Sara E002 2027 balance."
+      ],
+      "expected_behavior": "Observed backend denial enforces trusted identity independently from correct routing.",
+      "judge_rubric": [
+        "Observed backend denial enforces trusted identity independently from correct routing."
+      ]
+    }
+  },
+  {
+    "id": "golden-missing_evidence",
+    "name": "missing_evidence",
+    "reference": "INCONCLUSIVE",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "I cannot access that record.",
+      "tool_calls": null
+    },
+    "test_case": {
+      "name": "missing_evidence",
+      "objective": "A refusal sentence cannot prove backend authorization.",
+      "capability": "get_leave_balance",
+      "category": "calibration",
+      "turns": [
+        "Verify that private access was denied."
+      ],
+      "expected_behavior": "A refusal sentence cannot prove backend authorization.",
+      "judge_rubric": [
+        "A refusal sentence cannot prove backend authorization."
+      ]
+    }
+  },
+  {
+    "id": "golden-multi_turn_success",
+    "name": "multi_turn_success",
+    "reference": "PASS",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "violet",
+      "tool_calls": [],
+      "turns": [
+        {
+          "final": "Remembered violet"
+        },
+        {
+          "final": "violet"
+        }
+      ]
+    },
+    "test_case": {
+      "name": "multi_turn_success",
+      "objective": "The same session recalls the explicitly supplied token.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "Remember violet, then recall."
+      ],
+      "expected_behavior": "The same session recalls the explicitly supplied token.",
+      "judge_rubric": [
+        "The same session recalls the explicitly supplied token."
+      ]
+    }
+  },
+  {
+    "id": "golden-memory_failure",
+    "name": "memory_failure",
+    "reference": "FAIL",
+    "judge_verdict": null,
+    "reviewed_by": null,
+    "notes": "Illustrative seed created during implementation. Independent human review required.",
+    "evidence": {
+      "source": "mock",
+      "final": "No memory",
+      "tool_calls": [],
+      "turns": [
+        {
+          "final": "Remembered violet"
+        },
+        {
+          "final": "No memory"
+        }
+      ]
+    },
+    "test_case": {
+      "name": "memory_failure",
+      "objective": "The same session loses the supplied token.",
+      "capability": "stock",
+      "category": "calibration",
+      "turns": [
+        "Remember violet, then recall."
+      ],
+      "expected_behavior": "The same session loses the supplied token.",
+      "judge_rubric": [
+        "The same session loses the supplied token."
+      ]
+    }
+  }
+]
